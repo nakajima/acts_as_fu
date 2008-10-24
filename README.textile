@@ -5,7 +5,8 @@ extending plugins.
 
 h3. Usage
 
-In your spec_helper.rb or test_helper.rb
+In your spec_helper.rb (pretty sure this works with Test::Unit
+too, I'll leave you to figure it out though)
 
   require 'rubygems'
   require 'acts_as_fu'
@@ -15,11 +16,9 @@ In your spec_helper.rb or test_helper.rb
     config.include ActsAsFu
   end
 
-Then in your specs/tests:
+Then in your specs:
 
   describe "acts_as_gilmore_girls" do
-    include ActsAsFu # YOU GOTTA DO THIS PART
-  
     before(:each) do
       build_model :nerds do
         text :omg_omg_bio
