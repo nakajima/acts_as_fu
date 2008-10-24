@@ -10,10 +10,16 @@ In your spec_helper.rb or test_helper.rb
   require 'rubygems'
   require 'acts_as_fu'
   require 'spec'
+  
+  Spec::Runner.configure do |config|
+    config.include ActsAsFu
+  end
 
 Then in your specs/tests:
 
   describe "acts_as_gilmore_girls" do
+    include ActsAsFu # YOU GOTTA DO THIS PART
+  
     before(:each) do
       build_model :nerds do
         text :omg_omg_bio
