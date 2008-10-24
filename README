@@ -1,0 +1,45 @@
+h1. ACTS_AS-FU
+
+Now you have no excuse for not test-driving your ActiveRecord
+extending plugins.
+
+h3. Usage
+
+In your spec_helper.rb or test_helper.rb
+
+  require 'rubygems'
+  require 'acts_as_fu'
+  require 'spec'
+
+Then in your specs/tests:
+
+  describe "acts_as_gilmore_girls" do
+    before(:each) do
+      build_model :nerds do
+        text :omg_omg_bio
+        string :name
+        string :favorite_scene
+      end
+    end
+    
+    it "should require favorite scene" do
+      nerd = Nerd.new :favorite_scene => nil
+      nerd.should_not be_valid
+      nerd.errors.on(:favorite_scene).should_not be_nil
+    end
+    
+    # ETC!
+  end
+  
+The @build_model@ method allows you to build an ActiveRecord on
+the fly. It takes a block where you can specify columns. The table
+will be created in in an in-memory sqlite3 database. If you need
+another adapter, this project ain't for you. Sorry.
+
+
+
+TODO
+
+* Maybe a couple more options... maybe.
+
+(c) Copyright 2008 Pat Nakajima. All Rights Reserved. 
