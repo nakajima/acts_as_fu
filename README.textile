@@ -47,4 +47,9 @@ TODO
 
 * Maybe a couple more options... maybe.
 
+NOTE
+
+Despite the above example, watching Gilmore Girls doesn't make you
+a nerd. Probably.
+
 (c) Copyright 2008 Pat Nakajima. All Rights Reserved. 
