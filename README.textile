@@ -44,19 +44,8 @@ the fly. It takes a block where you can specify columns. The table
 will be created in in an in-memory sqlite3 database. If you need
 another adapter, this project ain't for you. Sorry.
 
-h3. Installation
-
-Since I'm not so bright, I can't figure out how to generate a gemspec
-without using one of those darnfangled, gargantuan tools like hoe or
-newgem. As a result, you'll need to use the gemify gem to install:
-
-  gemify -I
-
-If anybody knows an easier way to do the gemspec, please do share.  
-
 TODO
 
 * Maybe a couple more options... maybe.
-* A real gemspec
 
 (c) Copyright 2008 Pat Nakajima. All Rights Reserved. 
