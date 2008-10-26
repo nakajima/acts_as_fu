@@ -7,6 +7,8 @@ describe ActsAsFu do
     build_model(:foos) do
       string :name
       integer :age
+      
+      def self.awesome?; true end
     end
   end
   
@@ -27,6 +29,10 @@ describe ActsAsFu do
       proc {
         Foo
       }.should_not raise_error
+    end
+    
+    it "allows access to class" do
+      Foo.should be_awesome
     end
     
     describe "the class" do
