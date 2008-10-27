@@ -77,5 +77,22 @@ describe ActsAsFu do
         }.should raise_error(NoMethodError)
       end
     end
+    
+    describe "single table inheritance" do
+      it "allows superclass to be specified" do
+        build_model(:assets) do
+          string :type
+          string :name
+          
+          named_scope :pictures, :conditions => { :type => "Picture" }
+        end
+        
+        build_model(:pictures, :superclass => Asset)
+        
+        proc {
+          Picture.create!
+        }.should change(Asset.pictures, :count)
+      end
+    end
   end
 end

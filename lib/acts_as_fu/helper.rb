@@ -1,23 +1,38 @@
 module ActsAsFu
-  def build_model(name, &block)
-    ActiveRecord::Base.establish_connection({
-      :adapter => "sqlite3",
-      :database => ":memory:"
-    })
-
-    ActiveRecord::Base.connection.create_table(name, :force => true) { }
+  def build_model(name, options={}, &block)
+    connect!
     
-    klass_name = name.to_s.classify
-
-    Object.send(:remove_const, klass_name) rescue nil
-    Object.const_set(klass_name, Class.new(ActiveRecord::Base))
+    super_class = options[:superclass] || begin
+      ActiveRecord::Base.connection.create_table(name, :force => true) { }
+      ActiveRecord::Base
+    end
     
-    klass = klass_name.constantize
-
-    model_eval(klass, &block)
+    set_class!(name, super_class, &block)
   end
   
   private
+  
+  def set_class!(name, super_class, &block)
+    klass_name = name.to_s.classify
+    Object.send(:remove_const, klass_name) rescue nil
+    
+    klass = Class.new(super_class)
+    Object.const_set(klass_name, klass)
+
+    model_eval(klass, &block)
+  end
+
+  def connect!
+    begin
+      # This blows up if there's no connection
+      ActiveRecord::Base.connection
+    rescue
+      ActiveRecord::Base.establish_connection({
+        :adapter => "sqlite3",
+        :database => ":memory:"
+      })
+    end
+  end
   
   def model_eval(klass, &block)
     class << klass
@@ -30,7 +45,7 @@ module ActsAsFu
       alias_method_chain :method_missing, :columns
     end
     
-    klass.class_eval(&block)
+    klass.class_eval(&block) if block_given?
     
     class << klass
       alias_method :method_missing, :method_missing_without_columns

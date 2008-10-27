@@ -52,6 +52,22 @@ the fly. It takes a block where you can specify columns and methods.
 The table will be created in in an in-memory sqlite3 database. If
 you need another adapter, this project ain't for you. Sorry.
 
+h4. Single Table Inheritance
+
+If you want to create a model that's a subclass of another, you can
+use the @:superclass@ option:
+
+  build_model(:assets) do
+    string :type
+    string :name
+  
+    named_scope :pictures, :conditions => { :type => "Picture" }
+  end
+
+  build_model(:pictures, :superclass => Asset)
+
+The @Picture@ model will then be a subclass of the @Asset@ model.
+
 TODO
 
 * Maybe a couple more options... maybe.
