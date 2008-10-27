@@ -66,6 +66,10 @@ use the @:superclass@ option:
 
 The @Picture@ model will then be a subclass of the @Asset@ model.
 
+h3. Install
+
+  gem install nakajima-acts_as_fu --source=http://gems.github.com
+
 TODO
 
 * Maybe a couple more options... maybe.
