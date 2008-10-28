@@ -95,4 +95,22 @@ describe ActsAsFu do
       end
     end
   end
+  
+  describe "custom DB config" do
+    it "allows connection to custom DB config" do
+      db = "#{File.dirname(__FILE__)}/tmp.sqlite3"
+      
+      ActsAsFu.connect! \
+        :adapter => 'sqlite3',
+        :database => db
+      
+      build_model(:acts) do
+        string :body
+      end
+      
+      File.exists?(db).should be_true
+      
+      system("rm #{db}")
+    end
+  end
 end

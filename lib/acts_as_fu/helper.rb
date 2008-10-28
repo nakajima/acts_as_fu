@@ -1,4 +1,8 @@
 module ActsAsFu
+  def self.connect!(config={})
+    ActiveRecord::Base.establish_connection(config)
+  end
+  
   def build_model(name, options={}, &block)
     connect!
     
@@ -27,7 +31,7 @@ module ActsAsFu
       # This blows up if there's no connection
       ActiveRecord::Base.connection
     rescue
-      ActiveRecord::Base.establish_connection({
+      ActsAsFu.connect!({
         :adapter => "sqlite3",
         :database => ":memory:"
       })

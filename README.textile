@@ -48,8 +48,6 @@ Then in your specs:
   
 The @build_model@ method allows you to build an ActiveRecord on
 the fly. It takes a block where you can specify columns and methods.
-The table will be created in in an in-memory sqlite3 database. If
-you need another adapter, this project ain't for you. Sorry.
 
 h4. Single Table Inheritance
 
@@ -65,6 +63,18 @@ use the @:superclass@ option:
   build_model(:pictures, :superclass => Asset)
 
 The @Picture@ model will then be a subclass of the @Asset@ model.
+
+h4. Custom database configuration
+
+If the in-memory sqlite3 database doesn't suit your needs, you can
+specify an alternative configuration with the @ActsAsFu.connect!@ method:
+
+  ActsAsFu.connect! \
+    :adapter => 'mysql',
+    :database => 'some-db',
+    :username => 'some-user',
+    :password => 'some-password',
+    :socket => '/path/to/mysql.sock'
 
 h3. Install
 
