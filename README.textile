@@ -18,35 +18,42 @@ too, I'll leave you to figure it out though)
 
 Then in your specs:
 
-  describe "acts_as_gilmore_girls" do
-    before(:each) do
-      build_model :nerds do
-        text :omg_omg_bio
-        string :name
-        string :favorite_scene
-        def awesome?(show_name)
-          show_name == "Gilmore Girls"
-        end
+<pre>
+describe "acts_as_gilmore_girls" do
+  before(:each) do
+    build_model :nerds do
+      text :omg_omg_bio
+      string :name
+      string :favorite_scene
+      has_many
+      
+      validates_presence_of :favorite_scene
+      
+      def awesome?(show_name)
+        show_name == "Gilmore Girls"
       end
-    end
-    
-    it "should require favorite scene" do
-      nerd = Nerd.new :favorite_scene => nil
-      nerd.should_not be_valid
-      nerd.errors.on(:favorite_scene).should_not be_nil
-    end
-    
-    it "should think gilmore girls is awesome"
-      nerd = Nerd.new
-      nerd.awesome?("Gilmore Girls").should be_true
-    end
-    
-    it "has other stuff" do
-      # ETC!
+      
     end
   end
+
+  it "should require favorite scene" do
+    nerd = Nerd.new :favorite_scene => nil
+    nerd.should_not be_valid
+    nerd.errors.on(:favorite_scene).should_not be_nil
+  end
+
+  it "should think gilmore girls is awesome"
+    nerd = Nerd.new
+    nerd.awesome?("Gilmore Girls").should be_true
+  end
+
+  it "has other stuff" do
+    # ETC!
+  end
+end
+</pre>
   
-The @build_model@ method allows you to build an ActiveRecord on
+The @build_model@ method allows you to build an ActiveRecord model on
 the fly. It takes a block where you can specify columns and methods.
 
 h4. Single Table Inheritance
@@ -89,4 +96,4 @@ NOTE
 Despite the above example, watching Gilmore Girls doesn't make you
 a nerd. Probably.
 
-(c) Copyright 2008 Pat Nakajima. All Rights Reserved. 
+(c) Copyright 2008 Pat Nakajima. All Rights Reserved.
