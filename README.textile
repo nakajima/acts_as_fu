@@ -25,14 +25,12 @@ describe "acts_as_gilmore_girls" do
       text :omg_omg_bio
       string :name
       string :favorite_scene
-      has_many
       
       validates_presence_of :favorite_scene
       
       def awesome?(show_name)
         show_name == "Gilmore Girls"
-      end
-      
+      end      
     end
   end
 
