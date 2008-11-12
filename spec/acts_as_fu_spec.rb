@@ -113,4 +113,11 @@ describe ActsAsFu do
       system("rm #{db}")
     end
   end
+  
+  describe "ActsAsFu.report!" do
+    it "has a log" do
+      build_foos
+      ActsAsFu.log.should include("CREATE TABLE")
+    end
+  end
 end

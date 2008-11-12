@@ -1,6 +1,12 @@
 module ActsAsFu
-  def self.connect!(config={})
-    ActiveRecord::Base.establish_connection(config)
+  class << self
+    attr_reader :log
+  
+    def connect!(config={})
+      @log = ""
+      ActiveRecord::Base.logger = Logger.new(StringIO.new(log))
+      ActiveRecord::Base.establish_connection(config)
+    end
   end
   
   def build_model(name, options={}, &block)
