@@ -5,12 +5,13 @@ module ActsAsFu
     def connect!(config={})
       @log = ""
       ActiveRecord::Base.logger = Logger.new(StringIO.new(log))
+      ActiveRecord::Base.connection.disconnect! rescue nil
       ActiveRecord::Base.establish_connection(config)
     end
   end
   
   def build_model(name, options={}, &block)
-    connect!
+    connect! unless connected?
     
     super_class = options[:superclass] || begin
       ActiveRecord::Base.connection.create_table(name, :force => true) { }
@@ -33,15 +34,14 @@ module ActsAsFu
   end
 
   def connect!
-    begin
-      # This blows up if there's no connection
-      ActiveRecord::Base.connection
-    rescue
-      ActsAsFu.connect!({
-        :adapter => "sqlite3",
-        :database => ":memory:"
-      })
-    end
+    ActsAsFu.connect!({
+      :adapter => "sqlite3",
+      :database => ":memory:"
+    })
+  end
+  
+  def connected?
+    ActiveRecord::Base.connected?
   end
   
   def model_eval(klass, &block)

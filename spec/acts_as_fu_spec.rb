@@ -3,12 +3,18 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe ActsAsFu do
   include ActsAsFu
   
-  def build_foos
+  def create_models
     build_model(:foos) do
       string :name
       integer :age
       
       def self.awesome?; true end
+    end
+    
+    build_model(:bars) do
+      integer :foo_id
+      
+      belongs_to :foo
     end
   end
   
@@ -22,7 +28,7 @@ describe ActsAsFu do
   
   describe "after building a model" do
     before(:each) do
-      build_foos
+      create_models
     end
     
     it "creates the class" do
@@ -61,7 +67,7 @@ describe ActsAsFu do
       
       it "clears the table" do
         Foo.count.should == 5
-        build_foos
+        create_models
         Foo.count.should == 0
       end
       
@@ -70,7 +76,7 @@ describe ActsAsFu do
         
         proc { Foo.bar }.should_not raise_error
         
-        build_foos
+        create_models
         
         proc {
           Foo.bar
@@ -97,26 +103,33 @@ describe ActsAsFu do
   end
   
   describe "custom DB config" do
+    attr_reader :db
+    
+    before(:each) do
+      system("rm -rf #{db}")
+      @db = "#{File.dirname(__FILE__)}/tmp.sqlite3"
+    end
+    
     it "allows connection to custom DB config" do
-      db = "#{File.dirname(__FILE__)}/tmp.sqlite3"
-      
       ActsAsFu.connect! \
         :adapter => 'sqlite3',
         :database => db
       
-      build_model(:acts) do
+      build_model(:others) do
         string :body
       end
       
       File.exists?(db).should be_true
-      
-      system("rm #{db}")
+    end
+    
+    after(:each) do
+      system("rm -rf #{db}")
     end
   end
   
   describe "ActsAsFu.report!" do
     it "has a log" do
-      build_foos
+      create_models
       ActsAsFu.log.should include("CREATE TABLE")
     end
   end
