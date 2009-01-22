@@ -1,3 +1,8 @@
+%w(rubygems activerecord).each { |lib| require lib }
+
+RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless defined?(RAILS_ROOT)
+RAILS_ENV = 'test' unless defined?(RAILS_ENV)
+
 module ActsAsFu
   class << self
     attr_reader :log
@@ -31,6 +36,7 @@ module ActsAsFu
     Object.const_set(klass_name, klass)
 
     model_eval(klass, &block)
+    klass
   end
 
   def connect!

@@ -18,6 +18,16 @@ describe ActsAsFu do
     end
   end
   
+  describe "build_models" do
+    it "returns the new klass" do
+      klass = build_model(:people) do
+        string :name
+      end
+      
+      klass.should == Person
+    end
+  end
+  
   describe "without building a model" do
     it "asplodes" do
       proc {

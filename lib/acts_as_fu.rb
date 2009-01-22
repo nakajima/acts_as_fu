@@ -1,7 +1,5 @@
-$LOAD_PATH << File.dirname(__FILE__) + '/acts_as_fu'
+$LOAD_PATH << File.dirname(__FILE__)
 
-module ActsAsFu
-  VERSION = '0.0.2'
-end
+require 'acts_as_fu/base'
 
-%w(rubygems activerecord constants helper).each { |lib| require lib }
+include ActsAsFu
