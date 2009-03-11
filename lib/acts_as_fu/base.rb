@@ -17,24 +17,24 @@ module ActsAsFu
       self.establish_connection(config)
     end
   end
-  
+
   def build_model(name, options={}, &block)
     connect! unless connected?
-    
+
     super_class = options[:superclass] || begin
       ActsAsFu::Connection.connection.create_table(name, :force => true) { }
       ActsAsFu::Connection
     end
-    
+
     set_class!(name, super_class, &block)
   end
-  
+
   private
-  
+
   def set_class!(name, super_class, &block)
     klass_name = name.to_s.classify
     Object.send(:remove_const, klass_name) rescue nil
-    
+
     klass = Class.new(super_class)
     Object.const_set(klass_name, klass)
 
@@ -49,11 +49,11 @@ module ActsAsFu
     })
     ActsAsFu::Connection.connected = true
   end
-  
+
   def connected?
     ActsAsFu::Connection.connected
   end
-  
+
   def model_eval(klass, &block)
     class << klass
       def method_missing_with_columns(sym, *args, &block)
@@ -61,12 +61,12 @@ module ActsAsFu
           t.send(sym, *args)
         end
       end
-      
+
       alias_method_chain :method_missing, :columns
     end
-    
+
     klass.class_eval(&block) if block_given?
-    
+
     class << klass
       alias_method :method_missing, :method_missing_without_columns
     end
