@@ -4,14 +4,18 @@ RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless defined?(RAILS_ROOT)
 RAILS_ENV = 'test' unless defined?(RAILS_ENV)
 
 module ActsAsFu
-  class << self
-    attr_reader :log
-  
-    def connect!(config={})
+
+  class Connection < ActiveRecord::Base
+    cattr_accessor :acts_as_fu_connected
+    cattr_reader :log
+    self.abstract_class = true
+
+    def self.connect!(config={})
+#      p "ActsAsFu::Connection for #{config.inspect}"
       @log = ""
-      ActiveRecord::Base.logger = Logger.new(StringIO.new(log))
-      ActiveRecord::Base.connection.disconnect! rescue nil
-      ActiveRecord::Base.establish_connection(config)
+#      self.logger = Logger.new(StringIO.new(log))
+#      self.connection.disconnect! rescue nil
+      self.establish_connection(config)
     end
   end
   
@@ -19,8 +23,8 @@ module ActsAsFu
     connect! unless connected?
     
     super_class = options[:superclass] || begin
-      ActiveRecord::Base.connection.create_table(name, :force => true) { }
-      ActiveRecord::Base
+      ActsAsFu::Connection.connection.create_table(name, :force => true) { }
+      ActsAsFu::Connection
     end
     
     set_class!(name, super_class, &block)
@@ -40,20 +44,21 @@ module ActsAsFu
   end
 
   def connect!
-    ActsAsFu.connect!({
+    ActsAsFu::Connection.connect!({
       :adapter => "sqlite3",
       :database => ":memory:"
     })
+    ActsAsFu::Connection.acts_as_fu_connected = true
   end
   
   def connected?
-    ActiveRecord::Base.connected?
+    ActsAsFu::Connection.acts_as_fu_connected
   end
   
   def model_eval(klass, &block)
     class << klass
       def method_missing_with_columns(sym, *args, &block)
-        ActiveRecord::Base.connection.change_table(name.tableize) do |t|
+        ActsAsFu::Connection.connection.change_table(name.tableize) do |t|
           t.send(sym, *args)
         end
       end
