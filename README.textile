@@ -1,4 +1,12 @@
-h1. ACTS_AS-FU
+h2. Changes by Pivotal:
+
+In the original implementation, one could not truly use two different database connections: ActsAsFu would use ActiveRecord::Base's connection, or setting ActsAsFu's connection would change ActiveRecord::Base's connection globally, breaking other tests.
+
+To fix this, created ActsAsFu::Connection, an abstract class that extends from ActiveRecord::Base.  This segregates ActsAsFu's database connection (to whatever database technology) from ActiveRecord::Base, and thus from the rest of the project.
+
+<hr/>
+
+h1. ACTS-AS-FU
 
 Now you have no excuse for not test-driving your ActiveRecord
 extending plugins.

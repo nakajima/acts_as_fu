@@ -11,10 +11,9 @@ module ActsAsFu
     self.abstract_class = true
 
     def self.connect!(config={})
-#      p "ActsAsFu::Connection for #{config.inspect}"
-      @log = ""
-#      self.logger = Logger.new(StringIO.new(log))
-#      self.connection.disconnect! rescue nil
+      @@log = ""
+      self.logger = Logger.new(StringIO.new(log))
+      self.connection.disconnect! rescue nil
       self.establish_connection(config)
     end
   end

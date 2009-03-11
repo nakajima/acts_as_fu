@@ -53,7 +53,7 @@ describe ActsAsFu do
     
     describe "the class" do
       it "is a subclass of ActiveRecord::Base" do
-        Foo.superclass.should == ActiveRecord::Base
+        Foo.superclass.should == ActsAsFu::Connection
       end
       
       it "has specified attributes" do
@@ -121,7 +121,7 @@ describe ActsAsFu do
     end
     
     it "allows connection to custom DB config" do
-      ActsAsFu.connect! \
+      ActsAsFu::Connection.connect! \
         :adapter => 'sqlite3',
         :database => db
       
@@ -140,7 +140,7 @@ describe ActsAsFu do
   describe "ActsAsFu.report!" do
     it "has a log" do
       create_models
-      ActsAsFu.log.should include("CREATE TABLE")
+      ActsAsFu::Connection.log.should include("CREATE TABLE")
     end
   end
 end
