@@ -6,7 +6,7 @@ RAILS_ENV = 'test' unless defined?(RAILS_ENV)
 module ActsAsFu
 
   class Connection < ActiveRecord::Base
-    cattr_accessor :acts_as_fu_connected
+    cattr_accessor :connected
     cattr_reader :log
     self.abstract_class = true
 
@@ -47,11 +47,11 @@ module ActsAsFu
       :adapter => "sqlite3",
       :database => ":memory:"
     })
-    ActsAsFu::Connection.acts_as_fu_connected = true
+    ActsAsFu::Connection.connected = true
   end
   
   def connected?
-    ActsAsFu::Connection.acts_as_fu_connected
+    ActsAsFu::Connection.connected
   end
   
   def model_eval(klass, &block)
