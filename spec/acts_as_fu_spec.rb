@@ -110,6 +110,21 @@ describe ActsAsFu do
         }.should change(Asset.pictures, :count)
       end
     end
+
+    describe "nested class" do
+      it "is contained in a class" do
+        class Foo::SubThing; end
+
+        build_model(:sub_things, :contained => Foo) do
+          string :name
+        end
+
+        proc {
+          Foo::SubThing.create :name => "foo"
+        }.should change(Foo::SubThing, :count)
+      end
+    end
+
   end
   
   describe "custom DB config" do
