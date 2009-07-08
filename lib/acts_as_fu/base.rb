@@ -21,26 +21,24 @@ module ActsAsFu
   def build_model(name, options={}, &block)
     connect! unless connected?
 
-    super_class = options[:superclass] || begin
-      ActsAsFu::Connection.connection.create_table(name, :force => true) { }
-      ActsAsFu::Connection
-    end
+    klass_name  = name.to_s.classify
+    super_class = options[:superclass] || ActsAsFu::Connection
+    contained   = options[:contained]  || Object
 
-    set_class!(name, super_class, &block)
-  end
-
-  private
-
-  def set_class!(name, super_class, &block)
-    klass_name = name.to_s.classify
-    Object.send(:remove_const, klass_name) rescue nil
-
+    contained.send(:remove_const, klass_name) rescue nil
     klass = Class.new(super_class)
-    Object.const_set(klass_name, klass)
+    contained.const_set(klass_name, klass)
+
+    # table_name isn't available until after the class is created.
+    if super_class == ActsAsFu::Connection
+      ActsAsFu::Connection.connection.create_table(klass.table_name, :force => true) { }
+    end
 
     model_eval(klass, &block)
     klass
   end
+
+  private
 
   def connect!
     ActsAsFu::Connection.connect!({
@@ -57,7 +55,7 @@ module ActsAsFu
   def model_eval(klass, &block)
     class << klass
       def method_missing_with_columns(sym, *args, &block)
-        ActsAsFu::Connection.connection.change_table(name.tableize) do |t|
+        ActsAsFu::Connection.connection.change_table(table_name) do |t|
           t.send(sym, *args)
         end
       end
@@ -71,4 +69,5 @@ module ActsAsFu
       alias_method :method_missing, :method_missing_without_columns
     end
   end
+
 end
