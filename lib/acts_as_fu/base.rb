@@ -66,6 +66,7 @@ module ActsAsFu
     klass.class_eval(&block) if block_given?
 
     class << klass
+      remove_method :method_missing
       alias_method :method_missing, :method_missing_without_columns
     end
   end
