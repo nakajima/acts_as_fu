@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_fu}
-  s.version = "0.0.7.1"
+  s.version = "0.0.7.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pat Nakajima"]
-  s.date = %q{2008-10-26}
+  s.date = %q{2010-09-09}
   s.email = %q{patnakajima@gmail.com}
   s.files = ["lib/acts_as_fu", "lib/acts-as-fu.rb", "lib/acts_as_fu/base.rb", "lib/acts_as_fu.rb", "Rakefile", "Gemfile-2.2", "Gemfile-2.3", "Gemfile-3.0"]
   s.has_rdoc = true
