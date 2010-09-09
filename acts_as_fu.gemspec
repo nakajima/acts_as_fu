@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors = ["Pat Nakajima"]
   s.date = %q{2008-10-26}
   s.email = %q{patnakajima@gmail.com}
-  s.files = ["lib/acts_as_fu", "lib/acts-as-fu.rb", "lib/acts_as_fu/base.rb", "lib/acts_as_fu.rb"]
+  s.files = ["lib/acts_as_fu", "lib/acts-as-fu.rb", "lib/acts_as_fu/base.rb", "lib/acts_as_fu.rb", "Rakefile", "Gemfile-2.2", "Gemfile-2.3", "Gemfile-3.0"]
   s.has_rdoc = true
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.0}
