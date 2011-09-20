@@ -32,7 +32,7 @@ describe ActsAsFu do
     it "asplodes" do
       proc {
         Foo
-      }.should raise_error(NameError)
+      }.should raise_error
     end
   end
   
