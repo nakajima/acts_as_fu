@@ -72,6 +72,7 @@ describe ActsAsFu do
     
     describe "rebuilding the class" do
       before(:each) do
+        create_models
         5.times { Foo.create!(:name => "The WHIZ", :age => 100) }
       end
       
@@ -131,6 +132,13 @@ describe ActsAsFu do
 
   end
   
+  describe "ActsAsFu.report!" do
+    it "has a log" do
+      create_models
+      ActsAsFu::Connection.log.should include("CREATE TABLE")
+    end
+  end
+
   describe "custom DB config" do
     attr_reader :db
     
@@ -153,13 +161,6 @@ describe ActsAsFu do
     
     after(:each) do
       system("rm -rf #{db}")
-    end
-  end
-  
-  describe "ActsAsFu.report!" do
-    it "has a log" do
-      create_models
-      ActsAsFu::Connection.log.should include("CREATE TABLE")
     end
   end
 end
