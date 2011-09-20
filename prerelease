@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Load RVM into a shell session *as a function*
+if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
+  # First try to load from a user install
+  source "$HOME/.rvm/scripts/rvm"
+elif [[ -s "/usr/local/rvm/scripts/rvm" ]] ; then
+  # Then try to load from a root install
+  source "/usr/local/rvm/scripts/rvm"
+else
+  printf "ERROR: An RVM installation was not found.\n"
+fi
+
+set -e
+
+function run {
+  gem list --local bundler | grep bundler || gem install bundler --no-ri --no-rdoc
+
+  for v in 2.3.11 3.0.10 3.1.0 "" ; do
+      ACTS_AS_FU_ACTIVERECORD_VERSION=${v} bundle --quiet update --local activerecord || ACTS_AS_FU_ACTIVERECORD_VERSION=${v} bundle --quiet update activerecord
+      echo "Running $(ruby -v) against $(basename $(bundle show activerecord)) ..."
+      bundle exec spec spec
+  done
+}
+
+for v in ruby-1.8.7 ree-1.8.7 ruby-1.9.2 ; do
+    rvm use ${v}@acts_as_fu --create
+    run
+done
+
+echo 'Success!'
