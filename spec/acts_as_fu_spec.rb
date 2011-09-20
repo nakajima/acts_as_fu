@@ -71,27 +71,36 @@ describe ActsAsFu do
     end
     
     describe "rebuilding the class" do
-      before(:each) do
+      it "clears the table" do
         create_models
         5.times { Foo.create!(:name => "The WHIZ", :age => 100) }
-      end
-      
-      it "clears the table" do
         Foo.count.should == 5
         create_models
         Foo.count.should == 0
       end
       
       it "resets the class" do
+        create_models
         class << Foo; attr_reader :bar end
         
         proc { Foo.bar }.should_not raise_error
         
         create_models
-        
-        proc {
-          Foo.bar
-        }.should raise_error(NoMethodError)
+        proc { Foo.bar }.should raise_error(NoMethodError)
+      end
+
+      it "resets the attributes" do
+        build_model :fakers do
+          string :bar
+        end
+        proc { Faker.new :bar => "bar" }.should_not raise_error
+        proc { Faker.new :foo => "foo" }.should     raise_error
+
+        build_model :fakers do
+          string :foo
+        end
+        proc { Faker.new :foo => "foo" }.should_not raise_error
+        proc { Faker.new :bar => "bar" }.should     raise_error
       end
     end
     

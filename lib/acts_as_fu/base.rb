@@ -1,4 +1,5 @@
-%w(rubygems active_record logger).each { |lib| require lib }
+require 'active_record'
+require 'logger'
 
 RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless defined?(RAILS_ROOT)
 RAILS_ENV = 'test' unless defined?(RAILS_ENV)
@@ -23,6 +24,12 @@ module ActsAsFu
     klass_name  = name.to_s.classify
     super_class = options[:superclass] || ActsAsFu::Connection
     contained   = options[:contained]  || Object
+
+    begin
+      old_klass = contained.const_get(klass_name)
+      old_klass.reset_column_information if old_klass.respond_to?(:reset_column_information)
+    rescue
+    end
 
     contained.send(:remove_const, klass_name) rescue nil
     klass = Class.new(super_class)
