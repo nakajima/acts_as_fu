@@ -100,7 +100,11 @@ describe ActsAsFu do
           string :type
           string :name
           
-          named_scope :pictures, :conditions => { :type => "Picture" }
+          if ActiveRecord::VERSION::MAJOR < 3
+            named_scope :pictures, :conditions => { :type => "Picture" }
+          else
+            scope :pictures, :conditions => { :type => "Picture" }
+          end
         end
         
         build_model(:pictures, :superclass => Asset)
