@@ -1,4 +1,5 @@
 require 'active_record'
+require 'active_record/connection_adapters/sqlite3_adapter' 
 require 'logger'
 
 RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless defined?(RAILS_ROOT)
